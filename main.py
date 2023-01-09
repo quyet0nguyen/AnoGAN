@@ -7,7 +7,7 @@ import os
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-from keras.datasets import mnist
+from keras.datasets import fashion_mnist
 import argparse
 import anogan
 
@@ -20,7 +20,7 @@ parser.add_argument('--mode', type=str, default='test', help='train, test')
 args = parser.parse_args()
 
 ### 0. prepare data
-(X_train, y_train), (X_test, y_test) = mnist.load_data()
+(X_train, y_train), (X_test, y_test) = fashion_mnist.load_data()
 X_train = (X_train.astype(np.float32) - 127.5) / 127.5
 X_test = (X_test.astype(np.float32) - 127.5) / 127.5
 

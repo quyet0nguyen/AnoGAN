@@ -29,8 +29,9 @@ X_test = X_test[:,:,:,None]
 
 X_test_original = X_test.copy()
 
-X_train = X_train[y_train==1]
-X_test = X_test[y_test==1]
+X_train = X_train[y_train!=args.label_idx]
+X_test = X_test[y_test!=args.label_idx]
+
 print ('train shape:', X_train.shape)
 
 ### 1. train generator & discriminator
@@ -121,30 +122,30 @@ plt.show()
 ### t-SNE embedding 
 ### generating anomaly image for test (radom noise image)
 
-from sklearn.manifold import TSNE
+# from sklearn.manifold import TSNE
 
-random_image = np.random.uniform(0, 1, (100, 28, 28, 1))
-print("random noise image")
-plt.figure(4, figsize=(2, 2))
-plt.title('random noise image')
-plt.imshow(random_image[0].reshape(28,28), cmap=plt.cm.gray)
+# random_image = np.random.uniform(0, 1, (100, 28, 28, 1))
+# print("random noise image")
+# plt.figure(4, figsize=(2, 2))
+# plt.title('random noise image')
+# plt.imshow(random_image[0].reshape(28,28), cmap=plt.cm.gray)
 
-# intermidieate output of discriminator
-model = anogan.feature_extractor()
-feature_map_of_random = model.predict(random_image, verbose=1)
-feature_map_of_minist = model.predict(X_test_original[y_test != 1][:300], verbose=1)
-feature_map_of_minist_1 = model.predict(X_test[:100], verbose=1)
+# # intermidieate output of discriminator
+# model = anogan.feature_extractor()
+# feature_map_of_random = model.predict(random_image, verbose=1)
+# feature_map_of_minist = model.predict(X_test_original[y_test != 1][:300], verbose=1)
+# feature_map_of_minist_1 = model.predict(X_test[:100], verbose=1)
 
-# t-SNE for visulization
-output = np.concatenate((feature_map_of_random, feature_map_of_minist, feature_map_of_minist_1))
-output = output.reshape(output.shape[0], -1)
-anomaly_flag = np.array([1]*100+ [0]*300)
+# # t-SNE for visulization
+# output = np.concatenate((feature_map_of_random, feature_map_of_minist, feature_map_of_minist_1))
+# output = output.reshape(output.shape[0], -1)
+# anomaly_flag = np.array([1]*100+ [0]*300)
 
-X_embedded = TSNE(n_components=2).fit_transform(output)
-plt.figure(5)
-plt.title("t-SNE embedding on the feature representation")
-plt.scatter(X_embedded[:100,0], X_embedded[:100,1], label='random noise(anomaly)')
-plt.scatter(X_embedded[100:400,0], X_embedded[100:400,1], label='mnist(anomaly)')
-plt.scatter(X_embedded[400:,0], X_embedded[400:,1], label='mnist(normal)')
-plt.legend()
-plt.show()
+# X_embedded = TSNE(n_components=2).fit_transform(output)
+# plt.figure(5)
+# plt.title("t-SNE embedding on the feature representation")
+# plt.scatter(X_embedded[:100,0], X_embedded[:100,1], label='random noise(anomaly)')
+# plt.scatter(X_embedded[100:400,0], X_embedded[100:400,1], label='mnist(anomaly)')
+# plt.scatter(X_embedded[400:,0], X_embedded[400:,1], label='mnist(normal)')
+# plt.legend()
+# plt.show()

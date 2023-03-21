@@ -3,7 +3,7 @@ from keras.models import Sequential, Model
 from keras.layers import Input, Reshape, Dense, Dropout, MaxPooling2D, Conv2D, Flatten
 from keras.layers import Conv2DTranspose, LeakyReLU
 from keras.layers.core import Activation
-from keras.layers import BatchNormalization
+from tensorflow.keras.layers import BatchNormalization
 from keras.optimizers import Adam, RMSprop
 from keras import backend as K
 from keras import initializers
@@ -99,7 +99,7 @@ def train(BATCH_SIZE, X_train):
     d.compile(loss='mse', optimizer=d_optim)
     
 
-    for epoch in range(10):
+    for epoch in range(100):
         print ("Epoch is", epoch)
         n_iter = int(X_train.shape[0]/BATCH_SIZE)
         progress_bar = Progbar(target=n_iter)
@@ -134,8 +134,8 @@ def train(BATCH_SIZE, X_train):
         print ('')
 
         # save weights for each epoch
-        g.save_weights('weights/generator.h5', True)
-        d.save_weights('weights/discriminator.h5', True)
+        g.save_weights('weights/generator'+str(epoch)+'.h5', True)
+        d.save_weights('weights/discriminator'+str(epoch)+'.h5', True)
     return d, g
 
 ### generate images
